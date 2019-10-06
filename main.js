@@ -97,13 +97,13 @@ startgame = () => {
         }
 
         if (game_session) {
-            requestAnimationFrame(bar_movement);
+            setTimeout(function(){ bar_movement(); }, 16);
         } else {
             status_checker();
         }
     }
 
-    requestAnimationFrame(bar_movement);
+    setTimeout(function(){ bar_movement(); }, 16);
 }
 
 controller = () => {
