@@ -17,15 +17,5 @@ go_to_menu = () => {
     }
     document.getElementById("game_display").style.display = "none";
 
-    document.getElementById("help").style.display = "none";
-
     document.getElementById("menu").style.display = "block";
-}
-
-
-open_help = () => {
-    document.getElementById("game_display").style.display = "none";
-    document.getElementById("menu").style.display = "none";
-
-    document.getElementById("help").style.display = "block";
 }
