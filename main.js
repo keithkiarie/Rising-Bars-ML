@@ -57,11 +57,12 @@ bars_initialization = () => {
     rising_rate = initial_rising_rate;
 
     game_level = 0;
-    console.log(`Game Level: ${game_level}`);
-    info_display.innerHTML = "";
 }
 
 startgame = () => {
+    console.group('Gamesession');
+    console.log("Game started");
+    
     game_session = true;
     all_bars_started = false;
     refreshes = 0;
@@ -130,7 +131,10 @@ controller = () => {
 status_checker = () => {
 
     if (toggle_game_button.innerHTML == "Pause") {
-        info_display.innerHTML = "Game Over!";
+        
+        console.log("Game over!");
+        console.groupEnd();
+        
         toggle_game_button.innerHTML = "Start";
     }
     if (toggle_game_button.innerHTML == "Resume") {
