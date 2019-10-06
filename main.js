@@ -1,3 +1,5 @@
+let game_level;
+
 change_bar_color = () => {
     bar_color = document.getElementById("bar_color_picker").value;
 }
@@ -53,7 +55,9 @@ bars_initialization = () => {
     ball.key = false;
 
     rising_rate = initial_rising_rate;
-    level_display.innerHTML = 0;
+
+    game_level = 0;
+    console.log(`Game Level: ${game_level}`);
     info_display.innerHTML = "";
 }
 
@@ -93,7 +97,9 @@ startgame = () => {
         refreshes += 1;
         if (toggle_game_button.innerHTML == "Pause" && refreshes % 600 == 0) {
             rising_rate += rising_rate_increase;
-            level_display.innerHTML = parseInt(level_display.innerHTML) + 1;
+
+            game_level += 1;
+            console.log(`Game Level: ${game_level}`);
         }
 
         if (game_session) {
