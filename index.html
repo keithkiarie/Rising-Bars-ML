@@ -90,12 +90,7 @@
                 onselectstart="return false;">Start</button>
             <button id="close_game" onclick="go_to_menu()" class="btn">Menu</button>
 
-            <div style="float:right; font-size: 150%; padding-right: 0.5%">
-                <span>Level:</span> <span id="level_display">0</span>
-            </div>
-
             <br>
-            <span id="info_display"></span>
             <br>
         </div>
 
@@ -150,8 +145,7 @@
 
     var gamecanvas = document.getElementById("gamecanvas");
     var displayarea = document.getElementById("displayarea");
-    var info_display = document.getElementById("info_display");
-    var level_display = document.getElementById("level_display");
+
     var ctx = gamecanvas.getContext("2d");
     var toggle_game_button = document.getElementById("toggle_game_button");
     var game_session = false; // true if the game is being played (bars and ball are moving)
