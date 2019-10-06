@@ -7,7 +7,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0,, maximum-scale=1.0, user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="manifest" href="manifest.json">
+
     <meta name="mobile-web-app-capable" content="yes">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -268,17 +268,7 @@
         localStorage.visited = true;
         document.getElementById("default_longpress").click();
     }
-    try {
-        var control = JSON.parse(localStorage.controls);
 
-        if (control.mobile == "longpress") {
-            mobile_control_longpress();
-        } else if (control.mobile == "swipe") {
-            mobile_control_swiping();
-        }
-    } catch (error) {
-        mobile_control_longpress();
-    }
 
 
     //stores the game controls method
@@ -289,73 +279,12 @@
         });
 
         if (method == "longpress") {
-            mobile_control_longpress();
+            //mobile_control_longpress();
         } else if (method == "swipe") {
-            mobile_control_swiping();
+            //mobile_control_swiping();
         }
     }
 
-    function mobile_control_longpress() {
-        gamecanvas.removeEventListener("touchstart", swipe_touchstart);
-        gamecanvas.removeEventListener("touchmove", swipe_touchmove);
-        gamecanvas.removeEventListener("touchend", swipe_touchend);
-
-        gamecanvas.removeEventListener('touchstart', longpress_touchstart);
-        gamecanvas.removeEventListener('touchend', longpress_touchend);
-
-        //listen for longpress touch input
-        gamecanvas.addEventListener('touchstart', longpress_touchstart);
-        gamecanvas.addEventListener('touchend', longpress_touchend);
-    }
-
-    function mobile_control_swiping() {
-        gamecanvas.removeEventListener("touchstart", swipe_touchstart);
-        gamecanvas.removeEventListener("touchmove", swipe_touchmove);
-        gamecanvas.removeEventListener("touchend", swipe_touchend);
-
-        gamecanvas.removeEventListener('touchstart', longpress_touchstart);
-        gamecanvas.removeEventListener('touchend', longpress_touchend);
-
-        //listen for swipe input
-        gamecanvas.addEventListener('touchstart', swipe_touchstart);
-        gamecanvas.addEventListener('touchmove', swipe_touchmove);
-        gamecanvas.addEventListener('touchend', swipe_touchend);
-    }
-
-    //touchstart for longpress
-    function longpress_touchstart(e) {
-        if (event.touches[0].clientX < gamecanvas.width / 2) {
-            ball.key = 37;
-        } else if (event.touches[0].clientX > gamecanvas.width / 2) {
-            ball.key = 39;
-        }
-    }
-
-    //touchend for longpress
-    function longpress_touchend(e) {
-        ball.key = false;
-    }
-
-    var former_swiped_area;
-    //touchstart for swiping
-    function swipe_touchstart(e) {
-        former_swiped_area = e.touches[0].clientX;
-    }
-
-    //touchmove for swiping
-    function swipe_touchmove(e) {
-        if (event.touches[0].clientX < former_swiped_area - 1) {
-            ball.key = 37;
-        } else if (event.touches[0].clientX > former_swiped_area + 1) {
-            ball.key = 39;
-        }
-        former_swiped_area = event.touches[0].clientX;
-    }
-
-    //touchend for swiping
-    function swipe_touchend(e) {
-        ball.key = false;
-    }
 </script>
 <script src="controls.js"></script>
 <script src="main.js"></script>
