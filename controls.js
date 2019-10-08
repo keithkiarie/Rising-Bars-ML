@@ -9,23 +9,16 @@ var period_per_level = 10000; // level increases after this time interval
 
 
 // dimensions of the bars
-if (window.innerHeight > window.innerWidth) {
-    var bar_width = window.innerWidth / 6;
-    var bar_height = window.innerHeight / 60;
-} else {
-    var bar_width = window.innerWidth / 15;
-    var bar_height = window.innerHeight / 50;
-}
+var bar_width = 104;
+var bar_height = 11.417;
+
 
 var bars_initial_y = gamecanvas.height + 10; //the vertical position where bars start from
 var bars_number = 6; // the number of bars in a game session
 
 // radius of the ball
-if (window.innerHeight > window.innerWidth) {
-    var ball_radius = window.innerHeight / 80;
-} else {
-    var ball_radius = window.innerWidth / 150;
-}
+var ball_radius = 8.5625;
+
 
 var ball_initial_x = gamecanvas.width / 2;
 var ball_initial_y = 50;
