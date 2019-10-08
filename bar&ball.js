@@ -12,18 +12,8 @@ function Bar(initial_x, initial_y, initial_width, initial_height, index) {
             this.raise();
             check_contact();
         }
-
-        this.draw();
-
-        //to avoid drawing the ball everytime a bar is moved
-        if (this.id == 0) {
-            ball.draw();
-        }
     };
 
-    this.erase = () => {
-        ctx.clearRect(this.x - 10, this.y, this.width + 25, this.height + 2);
-    };
     this.raise = () => {
         if (this.y > 0) {
             this.y -= unit_distance_change;
@@ -31,10 +21,6 @@ function Bar(initial_x, initial_y, initial_width, initial_height, index) {
             this.y = bars_initial_y;
             this.x = random_x();
         }
-    };
-    this.draw = () => {
-        ctx.fillStyle = bar_color;
-        ctx.fillRect(this.x, this.y, this.width, this.height);
     };
 }
 
@@ -46,13 +32,6 @@ ball = {
     radius: ball_radius,
     contact: false,
     key: false,
-    draw() {
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
-        ctx.stroke();
-        ctx.fillStyle = ball_color;
-        ctx.fill();
-    },
 }
 
 
@@ -80,10 +59,7 @@ check_contact = () => {
     if (ball.key && ball.key == 39) {
         ball.x += ball_swerve;
     }
-    if (ball.key && ball.key == 27) {
-        game_session = false;
-        toggle_game_button.innerHTML = "Resume";
-    }
+    
 
     //Check if ball is within the screen
     if (ball.x > gamecanvas.width - ball.radius || ball.x < ball.radius || ball.y < ball.radius || ball.y > bars_initial_y) {
