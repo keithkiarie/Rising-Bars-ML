@@ -1,26 +1,83 @@
+const readline = require('readline'); //getting input from the console
+const fs = require('fs'); //file system
+
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
+
+let gamecanvas = {
+    width: 614,
+    height: 548
+};
+
+//CONTROLS.JS
+eval(fs.readFileSync('controls.js') + '');
+
+
+//BAR&BALL.JS
+eval(fs.readFileSync('bar&ball.js') + '');
+
+
+//MAIN
+
+var game_session = false; // true if the game is being played (bars and ball are moving)
+var bar_objects = []; //container for all the bar
+
+
 let game_level;
+let game_status = 'not_started'; //(not_started, playing, paused)
 
-change_bar_color = () => {
-    bar_color = document.getElementById("bar_color_picker").value;
+
+function event_listener(movement) {
+
+    if (movement == 'left') {
+        ball.key = 37;
+        setTimeout(() => {
+            ball.key = false;
+        }, 950);
+
+    } else if (movement == 'right') {
+
+        ball.key = 39;
+        setTimeout(() => {
+            ball.key = false;
+        }, 950);
+    }
 }
 
-change_ball_color = () => {
-    ball_color = document.getElementById("ball_color_picker").value;
+function AutoPlayer(id) {
+    this.choose_action = () => {
+        if (game_session) {
+            let random_value = Math.random() * 29;
+
+            if (random_value < 10) {
+                this.wait();
+            } else if (random_value < 20) {
+                this.move_left();
+            } else if (random_value < 30) {
+                this.move_right();
+            }
+
+            //recursion
+            setTimeout(() => {
+                this.choose_action();
+            }, 1000);
+            console.log(`Ball x:${ball.x} y:${ball.y}`)
+        }
+    };
+
+    this.wait = () => {
+        //do nothing
+    };
+    this.move_left = () => {
+        event_listener('left');
+    };
+    this.move_right = () => {
+        event_listener('right');
+    }
 }
-
-change_background_color = () => {
-    background_color = document.getElementById("background_color_picker").value;
-}
-
-
-//listen for keyboard input
-window.addEventListener('keydown', function (e) {
-    ball.key = e.keyCode;
-});
-window.addEventListener('keyup', function (e) {
-    ball.key = false;
-});
-
+let autoplayer = new AutoPlayer(0);
 
 //return a random horizontal position of bars
 random_x = () => {
@@ -32,18 +89,9 @@ random_x = () => {
 }
 
 
-clear_canvas = () => {
-    ctx.clearRect(-ball_radius, -ball_radius, gamecanvas.width + 2 * ball_radius, gamecanvas.height + 2 *
-        ball_radius);
-    ctx.rect(-ball_radius, -ball_radius, gamecanvas.width + 2 * ball_radius, gamecanvas.height + 2 *
-        ball_radius);
-    ctx.fillStyle = background_color;
-    ctx.fill();
-}
 
 bars_initialization = () => {
-    //clear the canvas, initialize the holder for bar objects then create new bars
-    clear_canvas();
+    //initialize the holder for bar objects then create new bars
 
     bar_objects = [];
     for (let i = 0; i < bars_number; i++) {
@@ -62,15 +110,14 @@ bars_initialization = () => {
 startgame = () => {
     console.group('Gamesession');
     console.log("Game started");
-    
+
+
     game_session = true;
     all_bars_started = false;
     refreshes = 0;
 
     //initial interval for calling the sequence of actions on ball and bars until all bars appear on the screen
     bar_movement = () => {
-        gamecanvas.focus();
-        clear_canvas();
 
         if (all_bars_started) {
             for (let i = 0; i < bar_objects.length; i++) {
@@ -96,7 +143,7 @@ startgame = () => {
 
         //changes game level after a certain number of refreshes, increases rising rate per level
         refreshes += 1;
-        if (toggle_game_button.innerHTML == "Pause" && refreshes % 600 == 0) {
+        if (game_status == "playing" && refreshes % 600 == 0) {
             rising_rate += rising_rate_increase;
 
             game_level += 1;
@@ -104,40 +151,74 @@ startgame = () => {
         }
 
         if (game_session) {
-            setTimeout(function(){ bar_movement(); }, 16);
+            setTimeout(function () { bar_movement(); }, 16);
         } else {
             status_checker();
         }
     }
 
-    setTimeout(function(){ bar_movement(); }, 16);
+    setTimeout(function () { bar_movement(); }, 16);
 }
 
 controller = () => {
-    if (toggle_game_button.innerHTML == "Start") {
-        bars_initialization();
-        startgame();
-        toggle_game_button.innerHTML = "Pause";
-    } else if (toggle_game_button.innerHTML == "Pause") {
-        game_session = false;
-        toggle_game_button.innerHTML = "Resume";
-    } else if (toggle_game_button.innerHTML == "Resume") {
-        game_session = true;
-        toggle_game_button.innerHTML = "Pause";
-        startgame();
+    if (game_status == "not_started") {
+        rl.question("Type 'begin' to start execution: ", (value) => {
+
+            if (value == 'begin' || value == 'Begin' || value == 'BEGIN') {
+
+                bars_initialization();
+                startgame();
+                autoplayer.choose_action();
+                game_status = "playing";
+            } else if (value == 'exit' || value == 'Exit' || value == 'EXIT') {
+                process.exit();
+            } else {
+                console.log('Invalid instruction!');
+                controller();
+            }
+        });
+
+    } else if (game_status == "playing") {
+        rl.question("Type 'pause' to pause execution: ", (value) => {
+
+            if (value == 'pause' || value == 'Pause' || value == 'PAUSE') {
+                game_session = false;
+                game_status = "paused";
+            } else if (value == 'exit' || value == 'Exit' || value == 'EXIT') {
+                process.exit();
+            } else {
+                console.log('Invalid instruction!');
+                controller();
+            }
+        });
+
+    } else if (game_status == "paused") {
+        rl.question("Type 'resume' to resume execution:", (value) => {
+
+            if (value == 'resume' || value == 'Resume' || value == 'RESUME') {
+                game_session = true;
+                game_status = "playing";
+                startgame();
+            } else if (value == 'exit' || value == 'Exit' || value == 'EXIT') {
+                process.exit();
+            } else {
+                console.log('Invalid instruction!');
+                controller();
+            }
+        });
     }
 }
 
 status_checker = () => {
 
-    if (toggle_game_button.innerHTML == "Pause") {
-        
+    if (game_status == "playing") {
         console.log("Game over!");
         console.groupEnd();
-        
-        toggle_game_button.innerHTML = "Start";
-    }
-    if (toggle_game_button.innerHTML == "Resume") {
 
+        game_status = "not_started";
+        controller();
     }
+
 }
+
+controller();
