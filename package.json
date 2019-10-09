@@ -1,0 +1,20 @@
+{
+  "name": "rising-bars-ml",
+  "version": "1.0.0",
+  "description": "Machine learning for playing Rising Bars computer game",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/keithkiarie/Rising-Bars-ML.git"
+  },
+  "author": "Keith Kiarie",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/keithkiarie/Rising-Bars-ML/issues"
+  },
+  "homepage": "https://github.com/keithkiarie/Rising-Bars-ML#readme"
+}
