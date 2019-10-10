@@ -1,24 +1,14 @@
-var http = require('http'),
-    fs = require('fs');
+let express = require('express');
+let app = express();
+let server = require('http').createServer(app);
+let io = require('socket.io').listen(server);
 
+let users = [];
+let connections = [];
 
-http.createServer(function (request, response) {
-    console.log('hit');
+server.listen(process.env.PORT || 3000);
+console.log('Server started');
 
-    fs.readFile('./' + request.url, function (err, html) {
-        if (err) {
-            //console.log(err);
-        }
-        try {
-            response.writeHeader(200, {
-                "Content-Type": "text/html"
-            });
-            response.write(html);
-        } catch (error) {
-            //console.log(error);
-        }
-
-        response.end();
-    });
-
-}).listen(8080);
+app.get('/', function(req, res) {
+    res.sendFile(__dirname + '/index.html');
+});
