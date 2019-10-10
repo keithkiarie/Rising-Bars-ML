@@ -157,7 +157,9 @@ startgame = () => {
             //Send gameplay status to users connected via socket.io
             let msg = {
                 ball: ball,
-                bars: bar_objects
+                bars: bar_objects,
+                canvas: gamecanvas,
+                level: game_level
             };
             io.emit('gameplay', JSON.stringify(msg));
         } else {

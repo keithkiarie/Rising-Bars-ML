@@ -10,14 +10,48 @@
 
 <body>
     <h2>Rising Bars ML</h2>
+    <div id="game_display"></div>
+    <span id="game_level"></span>
 </body>
 <script src="/socket.io/socket.io.js"></script>
 <script>
     let socket = io();
+    let gamecanvas = document.createElement('canvas');
+    let info; //stores gameplay info received from the back end
 
+    //insert the canvas to the display
+    document.getElementById('game_display').append(gamecanvas);
+
+    //listen for messages from the backend
     socket.on('gameplay', function (msg) {
-        console.log(msg);
+        info = JSON.parse(msg);
+        gameplay();
     });
+
+
+    function gameplay() {
+        gamecanvas.width = info.canvas.width;
+        gamecanvas.height = info.canvas.height;
+
+        var ctx = gamecanvas.getContext("2d");
+        ctx.fillStyle = 'black';
+        ctx.fillRect(0, 0, gamecanvas.width, gamecanvas.height);
+
+        //draw the ball
+        ctx.beginPath();
+        ctx.arc(info.ball.x, info.ball.y, info.ball.radius, 0, 2 * Math.PI);
+        ctx.stroke();
+        ctx.fillStyle = 'white';
+        ctx.fill();
+
+        //draw the bars
+        info.bars.forEach(bar => {
+            ctx.fillRect(bar.x, bar.y, bar.width, bar.height);
+        });
+
+        //game level
+        document.getElementById('game_level').innerHTML = `Level: ${info.level}`;
+    }
 </script>
 
 </html>
