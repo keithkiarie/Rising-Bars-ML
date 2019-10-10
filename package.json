@@ -13,6 +13,10 @@
   },
   "author": "Keith Kiarie",
   "license": "ISC",
+  "dependencies": {
+    "socket.io": "*",
+    "express": "*"
+  },
   "bugs": {
     "url": "https://github.com/keithkiarie/Rising-Bars-ML/issues"
   },
