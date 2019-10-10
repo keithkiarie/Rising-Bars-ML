@@ -11,6 +11,7 @@ let gamecanvas = {
     height: 548
 };
 
+
 //CONTROLS.JS
 eval(fs.readFileSync('controls.js') + '');
 
@@ -18,6 +19,8 @@ eval(fs.readFileSync('controls.js') + '');
 //BAR&BALL.JS
 eval(fs.readFileSync('bar&ball.js') + '');
 
+//SERVER.JS
+eval(fs.readFileSync('server.js') + '');
 
 //MAIN
 
@@ -63,7 +66,6 @@ function AutoPlayer(id) {
             setTimeout(() => {
                 this.choose_action();
             }, 1000);
-            console.log(`Ball x:${ball.x} y:${ball.y}`)
         }
     };
 
@@ -152,6 +154,12 @@ startgame = () => {
 
         if (game_session) {
             setTimeout(function () { bar_movement(); }, 16);
+            //Send gameplay status to users connected via socket.io
+            let msg = {
+                ball: ball,
+                bars: bar_objects
+            };
+            io.emit('gameplay', JSON.stringify(msg));
         } else {
             status_checker();
         }
