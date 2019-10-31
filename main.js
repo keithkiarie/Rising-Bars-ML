@@ -225,10 +225,35 @@ status_checker = () => {
         console.log("Game over!");
         console.groupEnd();
 
+        store_state();
+
         game_status = "not_started";
         controller();
     }
 
+}
+
+function store_state() {
+    let states; //previously stored
+    let state = {
+        ball: ball,
+        bars: bar_objects
+    };
+
+    fs.readFile('states.json', function (err, data) {
+        try {
+            states = JSON.parse(data);
+        } catch (error) {
+            states = [];
+        }
+
+        states.push(state);
+
+        fs.writeFile('states.json', JSON.stringify(states), function (err) {
+            err ? console.log("\n" + err) : console.log("\n State stored");
+
+        });
+    });
 }
 
 controller();
