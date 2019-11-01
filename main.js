@@ -11,6 +11,9 @@ let gamecanvas = {
     height: 548
 };
 
+let rounds = 0; // number of games to be played
+let current_round = 0;
+
 
 //CONTROLS.JS
 eval(fs.readFileSync('controls.js') + '');
@@ -176,10 +179,20 @@ controller = () => {
 
             if (value == 'begin' || value == 'Begin' || value == 'BEGIN') {
 
-                bars_initialization();
-                startgame();
-                autoplayer.choose_action();
-                game_status = "playing";
+                rl.question("How many rounds? ", (value) => {
+
+                    if (value == 'exit' || value == 'Exit' || value == 'EXIT') {
+                        process.exit();
+                    } else if (isNaN(value)) {
+                        console.log('Invalid instruction!');
+                        controller();
+                    } else {
+                        rounds = parseInt(value);
+                        current_round = 0;
+                        game_round_caller();
+                    }
+                });
+
             } else if (value == 'exit' || value == 'Exit' || value == 'EXIT') {
                 process.exit();
             } else {
@@ -228,7 +241,7 @@ status_checker = () => {
         store_state();
 
         game_status = "not_started";
-        controller();
+        game_round_caller();
     }
 
 }
@@ -254,6 +267,20 @@ function store_state() {
 
         });
     });
+}
+
+let game_round_caller = () => {
+    if (rounds > 0) {
+        console.log(`Round ${++current_round}`);
+        rounds--;
+
+        bars_initialization();
+        startgame();
+        autoplayer.choose_action();
+        game_status = "playing";
+    } else {
+        controller();
+    }
 }
 
 controller();
